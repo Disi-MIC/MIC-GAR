@@ -1,0 +1,11 @@
+api_platform:
+    title: MIC-GAR — API
+    description: API de suivi GAR (Axes stratégiques, Programmes, Actions, Tâches, Sous-tâches, Indicateurs) du Ministère de l'Industrie et du Commerce.
+    version: 1.0.0
+    # JSON simple (pas de JSON-LD/Hydra), même choix que GERM.
+    formats:
+        json: ['application/json']
+    defaults:
+        stateless: true
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']

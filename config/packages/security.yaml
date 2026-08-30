@@ -1,0 +1,27 @@
+security:
+    # Aucun mot de passe local : MIC-GAR n'authentifie personne lui-même,
+    # seul GERM le fait — pas de password_hashers, aucun compte à hasher.
+
+    # Provider factice requis par la config du firewall, mais jamais consulté :
+    # JwtAuthenticator fournit un UserBadge avec son propre loader (construit
+    # directement depuis les claims du JWT), qui court-circuite ce provider.
+    providers:
+        jwt_provider: { memory: null }
+
+    firewalls:
+        dev:
+            pattern: ^/(_profiler|_wdt|assets|build)/
+            security: false
+
+        # Firewall unique, stateless : chaque requête porte son propre JWT
+        # (Authorization: Bearer ...), pas de session/cookie contrairement à
+        # GERM — voir JwtAuthenticator.
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: jwt_provider
+            custom_authenticators:
+                - App\Security\JwtAuthenticator
+
+    access_control:
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
